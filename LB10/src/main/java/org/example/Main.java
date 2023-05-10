@@ -18,7 +18,7 @@ public class Main {
         finished = 0;
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < nThreads; i++) {
-            RunnableIntegralCalculator calculator = new RunnableIntegralCalculator(a + i * delta, a + i * delta + delta, n / nThreads, Math::sin, this);
+            RunnableIntegralCalculator calculator = new RunnableIntegralCalculator(a + i * delta, a + i * delta + delta, n / nThreads, this::fun, this);
             new Thread(calculator).start();
         }
         try {
@@ -43,4 +43,9 @@ public class Main {
 
     private double totalResult;
     private int finished;
+
+    public double fun(double x){
+      return 3 * Math.sqrt(x)*(1 + Math.sqrt(x));
+
+    }
 }

@@ -20,9 +20,14 @@ public class IntegralCalculator {
 
     }
     public double calculate(){
-        return ((step / 3) * 0.5) * start + IntStream.range(1, nSteps)
-                .mapToDouble(i -> start + i * step).map(f).map(y -> y + 2).sum() * IntStream.range(1, nSteps)
-                .mapToDouble(i -> start + i * step + step * 0.5 ).map(f).map(y -> y + 0.5 * end).sum();
+        DoubleUnaryOperator mapper = f;
+        double sum = (mapper.applyAsDouble(start) + mapper.applyAsDouble(end)) / 2 +
+               2 * mapper.applyAsDouble(end - step / 2);
+        sum = sum * step /3;
+        int bound = nSteps;
+        sum += IntStream.range(1, bound).mapToDouble(i -> start + i * step).map(v -> mapper.applyAsDouble(v)
+                + 2 * mapper.applyAsDouble(v - step / 2)).map(y -> y * step / 3).sum();
+        return sum;
     }
 }
 
